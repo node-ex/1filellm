@@ -92,3 +92,9 @@ pip-delete-this-directory.txt
 pip-log.txt
 pip-wheel-metadata/
 venv
+
+.venv
+compressed_output.txt
+uncompressed_output.txt
+GITHUB_TOKEN.txt
+# .tool-versions

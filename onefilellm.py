@@ -51,9 +51,53 @@ def download_file(url, target_path):
         f.write(response.content)
 
 def is_allowed_filetype(filename):
-    allowed_extensions = ['.py', '.txt', '.js', '.tsx', '.ts', '.md', '.cjs', '.html', '.json', '.ipynb', '.h', '.localhost', '.sh', '.yaml', '.example']
+    allowed_extensions = [
+        '.txt',
+        '.md',
+        '.json',
+        '.yaml',
+        '.env',
+        '.conf',
+        '.example',
+        '.html',
+        '.css',
+        '.scss',
+        '.less',
+        '.sass',
+        '.postcss',
+        '.sh',
+        '.py',
+        '.js',
+        '.jsx',
+        '.mjs'
+        '.cjs',
+        '.ts',
+        '.tsx',
+        '.h',
+        '.svelte',
+        '.ipynb',
+        '.localhost'
+    ]
     return any(filename.endswith(ext) for ext in allowed_extensions)
-    
+
+def is_allowed_filepath(filepath):
+    disallowed_path_parts = [
+        '.git',
+        'node_modules',
+        'package-lock.json',
+        'sample',
+        'integration',
+        'scripts',
+        'tools',
+        'benchmarks',
+        'hooks',
+        '.husky',
+        '.github',
+        '.circleci',
+        # 'spec.ts',
+    ]
+    return not any(path_part in filepath.split('/') for path_part in disallowed_path_parts)
+
 
 def process_ipynb_file(temp_file):
     with open(temp_file, "r", encoding='utf-8', errors='ignore') as f:
@@ -131,7 +175,7 @@ def process_github_repo(repo_url):
         files = response.json()
 
         for file in files:
-            if file["type"] == "file" and is_allowed_filetype(file["name"]):
+            if file["type"] == "file" and is_allowed_filetype(file["name"]) and is_allowed_filepath(file["path"]):
                 print(f"Processing {file['path']}...")
 
                 temp_file = f"temp_{file['name']}"
